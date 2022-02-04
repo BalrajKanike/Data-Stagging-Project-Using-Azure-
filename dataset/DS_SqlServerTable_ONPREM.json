@@ -1,0 +1,30 @@
+{
+	"name": "DS_SqlServerTable_ONPREM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SqlServer",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"sqlschema": {
+				"type": "string"
+			},
+			"sqltable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().sqlschema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().sqltable",
+				"type": "Expression"
+			}
+		}
+	}
+}
