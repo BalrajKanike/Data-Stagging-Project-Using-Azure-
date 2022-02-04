@@ -15,6 +15,16 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "select*from metadata where status<>'succeeded'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "SqlServerTable1",
+						"type": "DatasetReference"
+					},
 					"firstRowOnly": false
 				}
 			},
@@ -95,7 +105,13 @@
 							"outputs": [
 								{
 									"referenceName": "DS_ADLSGEN2_SINK",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"sinktable": {
+											"value": "@item().storagepath",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						},
@@ -177,6 +193,30 @@
 							"linkedServiceName": {
 								"referenceName": "LS_SqlServer",
 								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Web1",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Copy data1",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": "https://prod-13.eastus.logic.azure.com:443/workflows/b02ae19fe7c049a48d9539cf45886309/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=60E0ufj_E7MR1CeAAOl6CdPHSDvx68-xBWCcSHEVUP4",
+								"method": "GET"
 							}
 						}
 					]
